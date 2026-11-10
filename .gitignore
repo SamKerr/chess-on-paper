@@ -1,0 +1,24 @@
+# Secrets: commit .env.example, never the real thing
+.env
+.env.*
+!.env.example
+
+# OS and editors
+.DS_Store
+.idea/
+*.iml
+.vscode/
+*.swp
+
+# Dependencies and build output (add your stack's)
+node_modules/
+.venv/
+__pycache__/
+dist/
+build/
+coverage/
+*.tsbuildinfo
+
+# Test output
+test-results/
+playwright-report/

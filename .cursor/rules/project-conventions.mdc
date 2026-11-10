@@ -1,0 +1,37 @@
+---
+description: Code conventions for this repository
+alwaysApply: true
+---
+
+# Project conventions
+
+## Structure
+
+```
+src/
+├── lib/          # Pure logic, no React: notation, sheet model, geometry, view, export
+├── components/   # React components; Board.tsx is the one SVG renderer for screen, print, export
+├── App.tsx       # Sheet state, persistence, layout
+└── styles.css    # All styles: tokens on :root, dark mode, print rules
+e2e/              # Playwright specs
+public/engine/    # Vendored Stockfish (lite, single-threaded WASM) and its licence
+```
+
+- Relative imports, no path aliases, no barrel files.
+- New logic goes in `src/lib/<thing>.ts` with `src/lib/<thing>.test.ts` beside it.
+
+## Patterns
+
+- State is one `Sheet` object in `App`, in memory only. Diagrams are updated with
+  `Partial<Diagram>` patches. Tests pass a starting sheet with `<App initialSheet={...} />`.
+- Derive positions with `diagramView(diagram)`; never store FENs derived from notation.
+- Styling: CSS custom properties in `styles.css`. Board and print colours are fixed (they
+  must look the same on paper in both themes); everything else uses tokens.
+- Print layout uses mm units and lives in the `.page` rules; check `test-results/screens`.
+
+## Testing
+
+- Logic: Vitest unit tests next to the module.
+- UI behaviour: Testing Library tests in `src/App.test.tsx`, seeding the sheet via `initialSheet`.
+- Pointer interaction, print and layout: Playwright in `e2e/`, because jsdom has no layout.
+- A new feature needs a unit or component test; UI changes also need a look at screenshots.
